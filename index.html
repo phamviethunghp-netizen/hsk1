@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK1 Master - Audio</title>
+    <title>HSK1 MASTER FULL AUDIO</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,9 +13,8 @@
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
         body { font-family: 'Quicksand', sans-serif; background-color: #f8f9fa; -webkit-tap-highlight-color: transparent; }
         .lesson-card:active { transform: scale(0.98); }
-        .btn-audio:active { transform: scale(1.2); color: #ef4444; }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-        .playing { animation: pulse-red 1s infinite; }
+        .btn-audio:active { color: #ef4444; }
     </style>
 </head>
 <body>
@@ -24,51 +23,30 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- HÀM PHÁT ÂM THANH ---
         const playAudio = (text) => {
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'zh-CN'; // Giọng Trung Quốc phổ thông
-            utterance.rate = 0.8;    // Tốc độ nói hơi chậm để dễ nghe
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.8;
             window.speechSynthesis.speak(utterance);
         };
 
         const DATA = [
-            {
-                id: 1, title: "Chào hỏi & Đại từ",
-                vocab: [{hz:"我",py:"wǒ",vi:"tôi"},{hz:"你",py:"nǐ",vi:"bạn"},{hz:"他",py:"tā",vi:"anh ấy"},{hz:"她",py:"tā",vi:"cô ấy"},{hz:"我们",py:"wǒmen",vi:"chúng tôi"},{hz:"你好",py:"nǐ hǎo",vi:"chào bạn"},{hz:"您",py:"nín",vi:"ngài"},{hz:"老师",py:"lǎoshī",vi:"giáo viên"}],
-                grammar: "Cách chào cơ bản: Đại từ + 好. Khi chào nhiều người dùng Đại từ số nhiều + 好.",
-                sentences: [{hz:"老师好！",py:"Lǎoshī hǎo!",vi:"Chào thầy giáo!"},{hz:"你们好。",py:"Nǐmen hǎo.",vi:"Chào các bạn."}],
-                quiz: { q: "Lựa chọn từ đúng cho 'Chúng tôi'?", opts: ["你们", " chúng tôi (我们)", "họ (他们)"], ans: 1 }
-            },
-            {
-                id: 2, title: "Số đếm (1-10)",
-                vocab: [{hz:"一",py:"yī",vi:"1"},{hz:"二",py:"èr",vi:"2"},{hz:"三",py:"sān",vi:"3"},{hz:"四",py:"sì",vi:"4"},{hz:"五",py:"wǔ",vi:"5"},{hz:"六",py:"liù",vi:"6"},{hz:"七",py:"qī",vi:"7"},{hz:"八",py:"bā",vi:"8"},{hz:"九",py:"jiǔ",vi:"9"},{hz:"十",py:"shí",vi:"10"}],
-                grammar: "Lưu ý số 4 (sì) và số 10 (shí) dễ nhầm phát âm. Hãy nghe kỹ âm thanh.",
-                sentences: [{hz:"五个人",py:"Wǔ gè rén",vi:"5 người"},{hz:"十块",py:"Shí kuài",vi:"10 tệ (tiền)"}],
-                quiz: { q: "Số 8 phát âm là gì?", opts: ["sì", "bā", "liù"], ans: 1 }
-            },
-            {
-                id: 3, title: "Gia đình & Sở hữu",
-                vocab: [{hz:"家",py:"jiā",vi:"nhà"},{hz:"爸爸",py:"bàba",vi:"bố"},{hz:"妈妈",py:"māma",vi:"mẹ"},{hz:"儿子",py:"érzi",vi:"con trai"},{hz:"女儿",py:"nǚ'ér",vi:"con gái"},{hz:"朋友",py:"péngyou",vi:"bạn bè"},{hz:"的",py:"de",vi:"của"}],
-                grammar: "Cấu trúc sở hữu: A + 的 + B (B của A). Ví dụ: 我的家 (Nhà của tôi).",
-                sentences: [{hz:"我的爸爸",py:"Wǒ de bàba",vi:"Bố của tôi"},{hz:"他的朋友",py:"Tā de péngyou",vi:"Bạn của anh ấy"}],
-                quiz: { q: "Nghĩa của '我的妈妈' là gì?", opts: ["Mẹ của tôi", "Bố của tôi", "Bạn của mẹ"], ans: 0 }
-            },
-            {
-                id: 4, title: "Thời gian - Ngày tháng",
-                vocab: [{hz:"年",py:"nián",vi:"năm"},{hz:"月",py:"yuè",vi:"tháng"},{hz:"日",py:"rì",vi:"ngày"},{hz:"星期",py:"xīngqī",vi:"thứ"},{hz:"现在",py:"xiànzài",vi:"bây giờ"},{hz:"点",py:"diǎn",vi:"giờ"},{hz:"分钟",py:"fēnzhōng",vi:"phút"}],
-                grammar: "Thứ tự thời gian trong tiếng Trung: Năm -> Tháng -> Ngày -> Thứ.",
-                sentences: [{hz:"今天星期一。",py:"Jīntiān xīngqī yī.",vi:"Hôm nay là thứ hai."},{hz:"现在三点。",py:"Xiànzài sān diǎn.",vi:"Bây giờ là 3 giờ."}],
-                quiz: { q: "'Bây giờ' tiếng Trung là gì?", opts: ["昨天", "现在", "时候"], ans: 1 }
-            },
-            {
-                id: 5, title: "Hành động ăn uống",
-                vocab: [{hz:"吃",py:"chī",vi:"ăn"},{hz:"喝",py:"hē",vi:"uống"},{hz:"米饭",py:"mǐfàn",vi:"cơm"},{hz:"水",py:"shuǐ",vi:"nước"},{hz:"茶",py:"chá",vi:"trà"},{hz:"苹果",py:"píngguǒ",vi:"táo"},{hz:"水果",py:"shuǐguǒ",vi:"hoa quả"}],
-                grammar: "Động từ đi trực tiếp với tân ngữ: 吃 + món ăn, 喝 + đồ uống.",
-                sentences: [{hz:"我吃米饭。",py:"Wǒ chī mǐfàn.",vi:"Tôi ăn cơm."},{hz:"请喝茶。",py:"Qǐng hē chá.",vi:"Mời uống trà."}],
-                quiz: { q: "'Uống nước' nói thế nào?", opts: ["喝茶", "吃苹果", "喝水"], ans: 2 }
-            }
-            // ... (Các bài 6-15 giữ nguyên như bản trước)
+            { id: 1, title: "Chào hỏi & Đại từ", vocab: [{hz:"我",py:"wǒ",vi:"tôi"},{hz:"你",py:"nǐ",vi:"bạn"},{hz:"他",py:"tā",vi:"anh ấy"},{hz:"她",py:"tā",vi:"cô ấy"},{hz:"我们",py:"wǒmen",vi:"chúng tôi"},{hz:"你好",py:"nǐ hǎo",vi:"chào bạn"},{hz:"您",py:"nín",vi:"ngài"},{hz:"老师",py:"lǎoshī",vi:"giáo viên"}], grammar: "Chào hỏi: Đại từ + 好. Số nhiều thêm 们 (men).", sentences: [{hz:"老师好！",py:"Lǎoshī hǎo!",vi:"Chào thầy giáo!"},{hz:"你们好。",py:"Nǐmen hǎo.",vi:"Chào các bạn."}], quiz: { q: "Từ nào nghĩa là 'Chúng tôi'?", opts: ["你们", "我们", "他们"], ans: 1 } },
+            { id: 2, title: "Số đếm (1-10)", vocab: [{hz:"一",py:"yī",vi:"1"},{hz:"二",py:"èr",vi:"2"},{hz:"三",py:"sān",vi:"3"},{hz:"四",py:"sì",vi:"4"},{hz:"五",py:"wǔ",vi:"5"},{hz:"六",py:"liù",vi:"6"},{hz:"七",py:"qī",vi:"7"},{hz:"八",py:"bā",vi:"8"},{hz:"九",py:"jiǔ",vi:"9"},{hz:"十",py:"shí",vi:"10"}], grammar: "Số đếm HSK1 cơ bản. Chú ý thanh điệu số 4 và 10.", sentences: [{hz:"五个人",py:"Wǔ gè rén",vi:"5 người"},{hz:"十块",py:"Shí kuài",vi:"10 tệ."}], quiz: { q: "Số 8 phát âm là gì?", opts: ["sì", "bā", "liù"], ans: 1 } },
+            { id: 3, title: "Gia đình & Sở hữu", vocab: [{hz:"家",py:"jiā",vi:"nhà"},{hz:"爸爸",py:"bàba",vi:"bố"},{hz:"妈妈",py:"māma",vi:"mẹ"},{hz:"儿子",py:"érzi",vi:"con trai"},{hz:"女儿",py:"nǚ'ér",vi:"con gái"},{hz:"朋友",py:"péngyou",vi:"bạn bè"},{hz:"的",py:"de",vi:"của"}], grammar: "Sở hữu: A + 的 + B. Ví dụ: 我的爸爸 (Bố của tôi).", sentences: [{hz:"我的家",py:"Wǒ de jiā",vi:"Nhà của tôi"},{hz:"他的朋友",py:"Tā de péngyou",vi:"Bạn của anh ấy"}], quiz: { q: "'Của tôi' nói thế nào?", opts: ["我的", "你的", "他的"], ans: 0 } },
+            { id: 4, title: "Thời gian - Ngày tháng", vocab: [{hz:"年",py:"nián",vi:"năm"},{hz:"月",py:"yuè",vi:"tháng"},{hz:"日",py:"rì",vi:"ngày"},{hz:"星期",py:"xīngqī",vi:"thứ"},{hz:"现在",py:"xiànzài",vi:"bây giờ"},{hz:"点",py:"diǎn",vi:"giờ"},{hz:"分钟",py:"fēnzhōng",vi:"phút"}], grammar: "Thứ tự: Năm -> Tháng -> Ngày -> Thứ.", sentences: [{hz:"今天星期一。",py:"Jīntiān xīngqī yī.",vi:"Hôm nay thứ hai."},{hz:"现在三点。",py:"Xiànzài sān diǎn.",vi:"Bây giờ 3 giờ."}], quiz: { q: "'Bây giờ' là gì?", opts: ["昨天", "现在", "时候"], ans: 1 } },
+            { id: 5, title: "Ăn uống", vocab: [{hz:"吃",py:"chī",vi:"ăn"},{hz:"喝",py:"hē",vi:"uống"},{hz:"米饭",py:"mǐfàn",vi:"cơm"},{hz:"水",py:"shuǐ",vi:"nước"},{hz:"茶",py:"chá",vi:"trà"},{hz:"苹果",py:"píngguǒ",vi:"táo"},{hz:"水果",py:"shuǐguǒ",vi:"hoa quả"}], grammar: "Động từ + Tân ngữ. Ví dụ: 喝茶 (Uống trà).", sentences: [{hz:"我吃米饭。",py:"Wǒ chī mǐfàn.",vi:"Tôi ăn cơm."},{hz:"请喝茶。",py:"Qǐng hē chá.",vi:"Mời uống trà."}], quiz: { q: "'Uống nước' là gì?", opts: ["喝茶", "喝水", "吃水"], ans: 1 } },
+            { id: 6, title: "Địa điểm & Ở đâu", vocab: [{hz:"在",py:"zài",vi:"ở/đang"},{hz:"哪儿",py:"nǎr",vi:"đâu"},{hz:"学校",py:"xuéxiào",vi:"trường học"},{hz:"饭店",py:"fàndiàn",vi:"nhà hàng"},{hz:"医院",py:"yīyuàn",vi:"bệnh viện"},{hz:"商店",py:"shāngdiàn",vi:"cửa hàng"},{hz:"中国",py:"zhōngguó",vi:"Trung Quốc"}], grammar: "Hỏi ở đâu: Chủ ngữ + 在 + 哪儿?", sentences: [{hz:"你在哪儿？",py:"Nǐ zài nǎr?",vi:"Bạn ở đâu?"},{hz:"我在学校。",py:"Wǒ zài xuéxiào.",vi:"Tôi ở trường học."}], quiz: { q: "'Bệnh viện' là gì?", opts: ["学校", "医院", "中国"], ans: 1 } },
+            { id: 7, title: "Học tập & Công việc", vocab: [{hz:"做",py:"zuò",vi:"làm"},{hz:"工作",py:"gōngzuò",vi:"công việc"},{hz:"学习",py:"xuéxí",vi:"học tập"},{hz:"写",py:"xiě",vi:"viết"},{hz:"读",py:"dú",vi:"đọc"},{hz:"汉字",py:"hànzì",vi:"chữ Hán"},{hz:"看",py:"kàn",vi:"xem/nhìn"}], grammar: "学习汉语 (Học tiếng Trung). 写汉字 (Viết chữ Hán).", sentences: [{hz:"你在做什么？",py:"Nǐ zài zuò shénme?",vi:"Bạn đang làm gì?"},{hz:"看书。",py:"Kàn shū.",vi:"Xem sách/Đọc sách."}], quiz: { q: "'Viết chữ Hán' là gì?", opts: ["写汉字", "读汉字", "看汉字"], ans: 0 } },
+            { id: 8, title: "Đồ vật & Vị trí", vocab: [{hz:"桌子",py:"zhuōzi",vi:"cái bàn"},{hz:"椅子",py:"yǐzi",vi:"cái ghế"},{hz:"电脑",py:"diànnǎo",vi:"máy tính"},{hz:"书",py:"shū",vi:"sách"},{hz:"杯子",py:"bēizi",vi:"cốc"},{hz:"上",py:"shàng",vi:"trên"},{hz:"下",py:"xià",vi:"dưới"}], grammar: "Vị trí: Danh từ + 上/下/里. Ví dụ: 桌子上.", sentences: [{hz:"电脑在桌子上。",py:"Diànnǎo zài zhuōzi shàng.",vi:"Máy tính ở trên bàn."}], quiz: { q: "'Cái cốc' là gì?", opts: ["桌子", "杯子", "椅子"], ans: 1 } },
+            { id: 9, title: "Giao tiếp lịch sự", vocab: [{hz:"谢谢",py:"xièxie",vi:"cảm ơn"},{hz:"不客气",py:"bú kèqi",vi:"đừng khách sáo"},{hz:"对不起",py:"duìbuqǐ",vi:"xin lỗi"},{hz:"没关系",py:"méi guānxi",vi:"không sao"},{hz:"再见",py:"zàijiàn",vi:"tạm biệt"}], grammar: "Cảm ơn -> 不客气. Xin lỗi -> 没关系.", sentences: [{hz:"谢谢你。",py:"Xièxie nǐ.",vi:"Cảm ơn bạn."},{hz:"没关系。",py:"Méi guānxi.",vi:"Không sao đâu."}], quiz: { q: "Đáp lại 'Cảm ơn'?", opts: ["再见", "不客气", "对不起"], ans: 1 } },
+            { id: 10, title: "Sở thích & Năng lực", vocab: [{hz:"喜欢",py:"xǐhuan",vi:"thích"},{hz:"想",py:"xiǎng",vi:"muốn/nhớ"},{hz:"爱",py:"ài",vi:"yêu"},{hz:"会",py:"huì",vi:"biết (kỹ năng)"},{hz:"能",py:"néng",vi:"có thể"}], grammar: "会 nói về kỹ năng học được. 能 nói về khả năng.", sentences: [{hz:"我会 nói tiếng Trung.",py:"Wǒ huì shuō Hànyǔ.",vi:"Tôi biết nói tiếng Trung."},{hz:"我想买东西。",py:"Wǒ xiǎng mǎi dōngxi.",vi:"Tôi muốn mua đồ."}], quiz: { q: "'Thích' là gì?", opts: ["想", "喜欢", "爱"], ans: 1 } },
+            { id: 11, title: "Mua sắm & Tiền bạc", vocab: [{hz:"钱",py:"qián",vi:"tiền"},{hz:"块",py:"kuài",vi:"đồng (tệ)"},{hz:"买",py:"mǎi",vi:"mua"},{hz:"多少",py:"duōshao",vi:"bao nhiêu"},{hz:"个",py:"gè",vi:"cái (lượng từ)"},{hz:"衣服",py:"yīfu",vi:"quần áo"}], grammar: "Hỏi giá: 多少钱? Trả lời: Số + 块.", sentences: [{hz:"这个 bao nhiêu tiền?",py:"Zhège duōshao qián?",vi:"Cái này bao nhiêu tiền?"},{hz:"五块。",py:"Wǔ kuài.",vi:"5 tệ."}], quiz: { q: "'Mua quần áo' là gì?", opts: ["买衣服", "买钱", "买东西"], ans: 0 } },
+            { id: 12, title: "Con người & Tên gọi", vocab: [{hz:"谁",py:"shéi",vi:"ai"},{hz:"什么",py:"shénme",vi:"cái gì"},{hz:"名字",py:"míngzi",vi:"tên"},{hz:"同学",py:"tóngxué",vi:"bạn học"},{hz:"学生",py:"xuésheng",vi:"học sinh"},{hz:"医生",py:"yīshēng",vi:"bác sĩ"}], grammar: "Hỏi tên: 你叫什么名字?", sentences: [{hz:"他是谁？",py:"Tā shì shéi?",vi:"Anh ấy là ai?"},{hz:"我叫...",py:"Wǒ jiào...",vi:"Tôi tên là..."}], quiz: { q: "'Tên' tiếng Trung là gì?", opts: ["名字", "谁", "学生"], ans: 0 } },
+            { id: 13, title: "Tính từ & Mức độ", vocab: [{hz:"大",py:"dà",vi:"lớn"},{hz:"小",py:"xiǎo",vi:"nhỏ"},{hz:"冷",py:"lěng",vi:"lạnh"},{hz:"热",py:"rè",vi:"nóng"},{hz:"很",py:"hěn",vi:"rất"},{hz:"太",py:"tài",vi:"quá"},{hz:"漂亮",py:"piàoliang",vi:"đẹp"}], grammar: "Cấu trúc: 很 + Tính từ. 太...了 (Quá...rồi).", sentences: [{hz:"今天很冷。",py:"Jīntiān hěn lěng.",vi:"Hôm nay rất lạnh."},{hz:"她很漂亮。",py:"Tā hěn piàoliang.",vi:"Cô ấy rất đẹp."}], quiz: { q: "'Rất nóng' là gì?", opts: ["很大", "很热", "很冷"], ans: 1 } },
+            { id: 14, title: "Phương tiện & Đi lại", vocab: [{hz:"去",py:"qù",vi:"đi"},{hz:"来",py:"lái",vi:"đến"},{hz:"坐",py:"zuò",vi:"ngồi/đi (xe)"},{hz:"飞机",py:"fēijī",vi:"máy bay"},{hz:"出租车",py:"chūzūchē",vi:"taxi"},{hz:"火车站",py:"huǒchēzhàn",vi:"ga tàu"}], grammar: "坐 + Xe + 去 + Địa điểm.", sentences: [{hz:"坐出租车去学校。",py:"Zuò chūzūchē qù xuéxiào.",vi:"Đi taxi đến trường."}], quiz: { q: "'Taxi' là gì?", opts: ["飞机", "出租车", "ga tàu"], ans: 1 } },
+            { id: 15, title: "Thời tiết & Trạng thái", vocab: [{hz:"天气",py:"tiānqì",vi:"thời tiết"},{hz:"下雨",py:"xiàyǔ",vi:"mưa"},{hz:"怎么样",py:"zěnmeyàng",vi:"thế nào"},{hz:"好",py:"hǎo",vi:"tốt/khỏe"}], grammar: "Hỏi thời tiết: 天气怎么样?", sentences: [{hz:"明天天气怎么样？",py:"Míngtiān tiānqì zěnmeyàng?",vi:"Ngày mai thời tiết thế nào?"},{hz:"下雨了。",py:"Xiàyǔ le.",vi:"Mưa rồi."}], quiz: { q: "'Trời mưa' là gì?", opts: ["下雨", "天气", "怎么样"], ans: 0 } }
         ];
 
         function App() {
@@ -116,7 +94,7 @@
                                             </div>
                                             <div className="flex-1">
                                                 <h3 className="font-bold text-gray-800 tracking-tight">{lesson.title}</h3>
-                                                <p className="text-xs text-gray-400 mt-1 italic">Học có âm thanh</p>
+                                                <p className="text-xs text-gray-400 mt-1 italic">Full nội dung + Audio</p>
                                             </div>
                                             <i className="fas fa-chevron-right text-gray-200 group-hover:text-red-300 transition-colors"></i>
                                         </div>
@@ -131,20 +109,15 @@
                                     <i className="fas fa-arrow-left"></i> QUAY LẠI
                                 </button>
 
-                                {/* Section: Từ vựng */}
                                 <div className="bg-white rounded-3xl p-6 shadow-sm border mb-6">
                                     <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                        <span className="w-1 bg-red-500 h-6 rounded-full"></span> 
-                                        1. Từ vựng & Phát âm
+                                        <span className="w-1 bg-red-500 h-6 rounded-full"></span> 1. Từ vựng & Phát âm
                                     </h2>
                                     <div className="space-y-4">
                                         {selected.vocab.map((v, i) => (
-                                            <div key={i} onClick={() => playAudio(v.hz)} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl cursor-pointer active:bg-red-50 transition-colors border border-transparent hover:border-red-100 group">
+                                            <div key={i} onClick={() => playAudio(v.hz)} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl cursor-pointer active:bg-red-50 border border-transparent hover:border-red-100 group">
                                                 <div>
-                                                    <p className="text-2xl font-bold text-red-600 flex items-center gap-2">
-                                                        {v.hz} 
-                                                        <i className="fas fa-volume-up text-xs text-gray-300 group-hover:text-red-400"></i>
-                                                    </p>
+                                                    <p className="text-2xl font-bold text-red-600 flex items-center gap-2">{v.hz} <i className="fas fa-volume-up text-xs text-gray-300 group-hover:text-red-400"></i></p>
                                                     <p className="text-xs font-bold text-blue-500 uppercase tracking-tighter">{v.py}</p>
                                                 </div>
                                                 <p className="text-gray-600 font-medium">{v.vi}</p>
@@ -153,19 +126,21 @@
                                     </div>
                                 </div>
 
-                                {/* Section: Mẫu câu */}
+                                <div className="bg-white rounded-3xl p-6 shadow-sm border mb-6">
+                                    <h2 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+                                        <span className="w-1 bg-blue-500 h-6 rounded-full"></span> 2. Ngữ pháp cốt lõi
+                                    </h2>
+                                    <p className="text-sm leading-relaxed text-blue-900 bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-400">{selected.grammar}</p>
+                                </div>
+
                                 <div className="bg-white rounded-3xl p-6 shadow-sm border mb-6">
                                     <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                        <span className="w-1 bg-green-500 h-6 rounded-full"></span> 
-                                        2. Giao tiếp mẫu
+                                        <span className="w-1 bg-green-500 h-6 rounded-full"></span> 3. Giao tiếp mẫu
                                     </h2>
                                     <div className="space-y-4">
                                         {selected.sentences.map((s, i) => (
-                                            <div key={i} onClick={() => playAudio(s.hz)} className="p-4 bg-green-50 rounded-2xl border border-green-100 cursor-pointer active:bg-green-100 transition-colors">
-                                                <p className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                                                    {s.hz}
-                                                    <i className="fas fa-volume-up text-xs text-green-300"></i>
-                                                </p>
+                                            <div key={i} onClick={() => playAudio(s.hz)} className="p-4 bg-green-50 rounded-2xl border border-green-100 cursor-pointer active:bg-green-100">
+                                                <p className="text-lg font-bold text-gray-800 flex items-center gap-2">{s.hz} <i className="fas fa-volume-up text-xs text-green-300"></i></p>
                                                 <p className="text-xs text-green-600 font-bold mb-1 italic">{s.py}</p>
                                                 <p className="text-sm text-gray-500">{s.vi}</p>
                                             </div>
@@ -173,50 +148,27 @@
                                     </div>
                                 </div>
 
-                                {/* Section: Trắc nghiệm */}
                                 <div className="bg-white rounded-3xl p-6 shadow-md border-2 border-red-100 mb-8">
-                                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                        <i className="fas fa-pen-nib text-red-500"></i>
-                                        3. Kiểm tra bài {selected.id}
-                                    </h2>
+                                    <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><i className="fas fa-pen-nib text-red-500"></i> 4. Kiểm tra</h2>
                                     <p className="font-bold text-gray-700 mb-4">{selected.quiz.q}</p>
                                     <div className="space-y-2">
                                         {selected.quiz.opts.map((opt, idx) => (
-                                            <button key={idx} 
-                                                onClick={() => {
-                                                    if(idx === selected.quiz.ans) {
-                                                        playAudio("很好");
-                                                        alert("Chính xác! 🎉");
-                                                    } else {
-                                                        alert("Sai rồi, xem lại nhé!");
-                                                    }
-                                                }}
-                                                className="quiz-opt w-full text-left p-4 border rounded-2xl font-medium text-gray-600 hover:border-red-400 transition-all">
-                                                {opt}
-                                            </button>
+                                            <button key={idx} onClick={() => { if(idx === selected.quiz.ans) { playAudio("很好"); alert("Chính xác! 🎉"); } else alert("Sai rồi!"); }} className="w-full text-left p-4 border rounded-2xl font-medium text-gray-600 hover:border-red-400 transition-all">{opt}</button>
                                         ))}
                                     </div>
                                 </div>
 
-                                <button onClick={() => saveProgress(selected.id)} className="w-full bg-red-600 text-white py-5 rounded-3xl font-bold text-lg shadow-xl active:scale-95 transition-all mb-10">
-                                    HOÀN THÀNH BÀI HỌC
-                                </button>
+                                <button onClick={() => saveProgress(selected.id)} className="w-full bg-red-600 text-white py-5 rounded-3xl font-bold text-lg shadow-xl active:scale-95 mb-10">HOÀN THÀNH BÀI HỌC</button>
                             </div>
                         )}
 
                         {tab === 'settings' && (
                             <div className="animate-in fade-in duration-500">
-                                <h2 className="text-2xl font-bold mb-6">Cài đặt học tập</h2>
+                                <h2 className="text-2xl font-bold mb-6 text-gray-800">Cài đặt học tập</h2>
                                 <div className="bg-white p-6 rounded-3xl shadow-sm border">
-                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">Nhắc nhở hàng ngày</label>
+                                    <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">Giờ học mỗi ngày</label>
                                     <input type="time" className="w-full text-3xl font-bold border-b-2 border-red-500 py-4 outline-none text-red-600 bg-transparent mb-6" defaultValue="20:00" />
-                                    <button onClick={() => {
-                                        Notification.requestPermission();
-                                        alert("Đã lưu nhắc nhở thành công!");
-                                    }} className="w-full bg-black text-white py-4 rounded-2xl font-bold">LƯU CÀI ĐẶT</button>
-                                </div>
-                                <div className="mt-8 p-4 bg-gray-100 rounded-2xl text-xs text-gray-500 italic text-center">
-                                    Bản quyền HSK1 Master - Học tiếng Trung dễ dàng.
+                                    <button onClick={() => { Notification.requestPermission(); alert("Đã lưu nhắc nhở!"); }} className="w-full bg-black text-white py-4 rounded-2xl font-bold shadow-lg">LƯU CÀI ĐẶT</button>
                                 </div>
                             </div>
                         )}
@@ -224,12 +176,10 @@
 
                     <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 flex justify-around shadow-lg">
                         <button onClick={() => {setTab('home'); setSelected(null)}} className={`flex flex-col items-center gap-1 ${tab==='home'?'text-red-500':'text-gray-300'}`}>
-                            <i className="fas fa-th-large text-xl"></i>
-                            <span className="text-[10px] font-bold uppercase">Bài học</span>
+                            <i className="fas fa-th-large text-xl"></i><span className="text-[10px] font-bold uppercase tracking-tighter">Học tập</span>
                         </button>
                         <button onClick={() => setTab('settings')} className={`flex flex-col items-center gap-1 ${tab==='settings'?'text-red-500':'text-gray-300'}`}>
-                            <i className="fas fa-cog text-xl"></i>
-                            <span className="text-[10px] font-bold uppercase">Cài đặt</span>
+                            <i className="fas fa-cog text-xl"></i><span className="text-[10px] font-bold uppercase tracking-tighter">Cài đặt</span>
                         </button>
                     </nav>
                 </div>
